@@ -1,2 +1,2 @@
-# sigma
+# Sigma:
 Small Indie Game Market Analysis
