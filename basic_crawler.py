@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import requests
+import time
 from bs4 import BeautifulSoup
 
 # URL_BASE_TAG = "https://steamdb.info/tags/?tagid=492"
@@ -25,10 +28,9 @@ def _steamdb_request(URL_BASE_TAG = "https://steamdb.info/tags/?tagid=492", file
 def _steamdb_all_app_indie(file_save =  False):
     if file_save:
         html_sample = open("sample.html", "r", encoding="UTF-8")
+        sample = ''.join(html_sample.readlines())
     else:
-        html_sample = _steamdb_request(file_save=True)
-        
-    sample = ''.join(html_sample.readlines())
+        sample = _steamdb_request(file_save=True)
 
     soup = BeautifulSoup(sample, "lxml")
     all_td = soup.find_all("td", class_="text-left")
@@ -39,9 +41,29 @@ def _steamdb_all_app_indie(file_save =  False):
             # print(td.a.get('href'))
             apps[td.a.get('href').split('/')[-2]] = td.a.get_text()
 
-    if file_save:
-        file = open("out.txt", "w", encoding="UTF-8")
-        file.write(str(apps))
+    # if file_save:
+    #     file = open("out.txt", "w", encoding="UTF-8")
+    #     file.write(str(apps))
     
     return apps
 
+
+apps = _steamdb_all_app_indie(file_save=True)
+
+for k in apps.keys():
+    print("https://steamdb.info/app/{}/graphs/".format(k))
+    r = requests.get("https://steamdb.info/app/{}/graphs/".format(k), headers=_emulate_agent())
+    r = r.text.encode("UTF-8")
+    # print(r.text.encode("UTF-8"))
+    soup = BeautifulSoup(r, "lxml")
+    if len(soup.find(class_="span8").find_all("tr")) > 6:
+        release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text()
+        print(release_date.encode("UTF-8"))
+        all_ul = soup.find_all("ul", class_="app-chart-numbers")
+        for ul in all_ul:
+            stats = ul.find_all("li")
+            for s in stats:
+                print(s.encode("UTF-8"))
+    else :
+        print("Mauvaise App")
+    time.sleep(3)
