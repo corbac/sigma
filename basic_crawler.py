@@ -63,28 +63,28 @@ def _stats_str_parsing(stats_str=''):
         s = str(s.encode('UTF-8')).replace('\\n', '', 1)
         if 'followers' in s:
             print('\t>Processing...')
-            stat_nb = s.split(' ')[0]
+            stat_nb = str(s.split(' ')[0])
             stat_desc = s.replace(stat_nb+' ', '')
             result.append(stat_nb)
         elif 'all-time player peak' in s:
             print('\t>Processing...')
-            stat_nb = s.split(' ')[0]
+            stat_nb = str(s.split(' ')[0])
             stat_desc = s.replace(stat_nb+' ', '')
             print([stat_desc.replace('all-time player peak ', '')])
-            stat_date = stat_desc.replace('all-time player peak ', '').replace("\\xc3\\xa2\\xc2\\x80\\xc2\\x93 ", '').replace(" UTC'", "")
+            stat_date = str(stat_desc.replace('all-time player peak ', '').replace("\\xc3\\xa2\\xc2\\x80\\xc2\\x93 ", '').replace('\\xe2\\x80\\x93', '').replace(" UTC'", ""))
 
             result.append(stat_nb)
             result.append(stat_date)
         elif 'minutes median playtime' in s or 'minutes average playtime' in s:
             print('\t>Processing...')
-            stat_nb_2_wk = s.split(' ')[0]
+            stat_nb_2_wk = str(s.split(' ')[0])
             stat_desc_tmp = s.replace(stat_nb_2_wk+' ', '')
-            stat_desc_2_wk = stat_desc_tmp.split(' ')[0]
+            stat_desc_2_wk = str(stat_desc_tmp.split(' ')[0])
 
             print(stat_desc_tmp.split('\\n'))
-            stat_nb_ltd = stat_desc_tmp.split('\\n')[1].split(' ')[0]
+            stat_nb_ltd = str(stat_desc_tmp.split('\\n')[1].split(' ')[0])
             stat_desc_tmp = stat_desc_tmp.split('\\n')[1].replace(stat_nb_ltd+' ', '')
-            stat_desc_ltd = stat_desc_tmp.split(' ')[0]
+            stat_desc_ltd = str(stat_desc_tmp.split(' ')[0])
 
             result.append(stat_nb_2_wk)
             result.append(stat_desc_2_wk)
@@ -93,8 +93,8 @@ def _stats_str_parsing(stats_str=''):
         elif 'owners' in s:
             print('\t>Processing...')
             stat_nb = s.split(' owners ')[0].split(' .. ')
-            stat_nb_min = stat_nb[0].replace(',', '')
-            stat_nb_max = stat_nb[1].replace(',', '')
+            stat_nb_min = str(stat_nb[0].replace(',', ''))
+            stat_nb_max = str(stat_nb[1].replace(',', ''))
             result.append(stat_nb_min)
             result.append(stat_nb_max)
 
@@ -112,7 +112,7 @@ for k in apps.keys():
     # print(r.text.encode("UTF-8"))
     soup = BeautifulSoup(r, "lxml")
     if len(soup.find(class_="span8").find_all("tr")) > 6:
-        release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text()
+        release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
         print(release_date.encode("UTF-8"))
         all_ul = soup.find_all("ul", class_="app-chart-numbers")
         stats_raw_str = []
