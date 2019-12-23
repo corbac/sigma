@@ -4,6 +4,7 @@ import requests
 import time
 from bs4 import BeautifulSoup
 import re
+import traceback
 
 # URL_BASE_TAG = "https://steamdb.info/tags/?tagid=492"
 
@@ -125,103 +126,70 @@ def _get_price_list(appid=None):
     if not price:
         return None
 
-    return re.findall("[0-9]+.?[0-9]*", price.get_text())[-1].replace(',', '.')
+    return str(re.findall("[0-9]+.?[0-9]*", price.get_text())[-1].replace(',', '.'))
 
+
+def get_steam_apps_stats(app_id=None):
+    apps = _steamdb_all_app_indie(file_save=True)
+    keys = [app_id] if app_id else apps.keys()
+
+    result_file = open("app_stats.csv", "w+", encoding="UTF-8")
+
+    for k in keys:
+        print("https://steamdb.info/app/{}/graphs/".format(k))
+        r = requests.get("https://steamdb.info/app/{}/graphs/".format(k), headers=_emulate_agent())
+        r = r.text.encode("UTF-8")
+        soup = BeautifulSoup(r, "lxml")
+
+        
+        if len(soup.find(class_="span8").find_all("tr")) > 6:
+            try:
+                # Retrieve: Release Date
+                release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
+                print(release_date.encode("UTF-8"))
+
+                # Retrieve: Stats
+                all_ul = soup.find_all("ul", class_="app-chart-numbers")
+                stats_raw_str = []
+                for ul in all_ul:
+                    stats = ul.find_all("li")
+                    for s in stats:
+                        # print(s.get_text().encode("UTF-8"))
+                        stats_raw_str.append(s.get_text())
+                
+                # Retrieve: Tags list
+                tag_list = _get_tag_list(appid=k)
+
+                # Retrieve: Price
+                price = _get_price_list(appid=k)
+
+                # Retrieve: Reviews numbers
+                good_reviews_nb = soup.find("span", class_="header-thing-good").get_text().replace(',', '')
+                bad_reviews_nb = soup.find("span", class_="header-thing-poor").get_text().replace(',', '')
+                all_reviews_nb = good_reviews_nb + bad_reviews_nb
+
+                
+                out_put = '"'+'","'.join(tag_list)+'"'
+                out_put = '"'+ '","'.join(_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'",'+out_put
+                out_put = '"'+all_reviews_nb+'","'+good_reviews_nb+'","'+bad_reviews_nb+'",'+out_put
+                out_put = '"'+str(k)+'","'+apps.keys()[k]+'","'+'"'+release_date+'","'+price+'",'+out_put
+                result_file.write(out_put+'\n')
+                result_file.flush()
+            except Exception as e:
+                # print('\t'.join(stats_raw_str).encode('UTF-8'))
+                fail_log = open("failed_app.log", "a", encoding="UTF-8")
+                fail_log.write("https://steamdb.info/app/{app_id}/graphs/ ...Failed with: \t > {e}\n".format(e=e, app_id=k))
+                fail_log.close()
+                print('ERROR '* 12)
+                print(e.__traceback__)
+                print(e)
+                traceback.print_exc()
+        else :
+            print("Mauvaise App")
+        time.sleep(5)
+
+    result_file.close()
 ################################
 
-apps = _steamdb_all_app_indie(file_save=True)
 
-result_file = open("app_stats.csv", "w+", encoding="UTF-8")
-for k in apps.keys():
-    print("https://steamdb.info/app/{}/graphs/".format(k))
-    r = requests.get("https://steamdb.info/app/{}/graphs/".format(k), headers=_emulate_agent())
-    r = r.text.encode("UTF-8")
-    soup = BeautifulSoup(r, "lxml")
-
-    
-    if len(soup.find(class_="span8").find_all("tr")) > 6:
-        try:
-            # Retrieve: Release Date
-            release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
-            print(release_date.encode("UTF-8"))
-
-            # Retrieve: Stats
-            all_ul = soup.find_all("ul", class_="app-chart-numbers")
-            stats_raw_str = []
-            for ul in all_ul:
-                stats = ul.find_all("li")
-                for s in stats:
-                    # print(s.get_text().encode("UTF-8"))
-                    stats_raw_str.append(s.get_text())
-            
-            # Retrieve: Tags list
-            tag_list = _get_tag_list(appid=k)
-
-            # Retrieve: Price
-            price = _get_price_list(appid=k)
-
-            # Retrieve: Reviews numbers
-            good_reviews_nb = int(soup.find("span", class_="header-thing-good").get_text().replace(',', ''))
-            bad_reviews_nb = int(soup.find("span", class_="header-thing-poor").get_text().replace(',', ''))
-            all_reviews_nb = good_reviews_nb + bad_reviews_nb
-
-            
-            out_put = '"'+'","'.join(tag_list)+'"'
-            out_put = '"'+ '","'.join(_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'",'+out_put
-            out_put = '"'+all_reviews_nb+'","'+good_reviews_nb+'","'+bad_reviews_nb+'",'+out_put
-            out_put = '"'+k+'","'+apps[k]+'","'+'"'+release_date+'","'+price+'",'+out_put
-            result_file.write(out_put+'\n')
-            result_file.flush()
-        except Exception as e:
-            # print('\t'.join(stats_raw_str).encode('UTF-8'))
-            fail_log = open("failed_app.log", "a", encoding="UTF-8")
-            fail_log.write("https://steamdb.info/app/{app_id}/graphs/ ...Failed with: \t > {e}\n".format(e=e, app_id=k))
-            fail_log.close()
-            print('ERROR '* 12)
-            print(e.__traceback__)
-            print(e)
-    else :
-        print("Mauvaise App")
-    time.sleep(5)
-
-result_file.close()
-
-
-# date_str = "May 31, 2017 ()"
-# stats_str = """1 players right now\t6 24-hour player peak\t108 all-time player peak November 22, 2011 \xe2\x80\x93 20:43:21 UTC\t848 followers\t\n0 minutes median playtime in last 2 weeks\n3.1 hours median total playtime\n\t\n0 minutes average playtime in last 2 weeks\n2.5 hours average total playtime\n\t\n500,000 .. 1,000,000 owners (?)\n
-# """
-
-# print(_get_price_list(max_=10, appid=294100))
-
-# print(_stats_str_parsing(stats_str))
-
-# print("https://steamdb.info/app/{}/graphs/".format(105600))
-# r = requests.get("https://steamdb.info/app/{}/graphs/".format(105600), headers=_emulate_agent())
-# r = r.text.encode("UTF-8")
-# # print(r.text.encode("UTF-8"))
-# soup = BeautifulSoup(r, "lxml")
-# # print(soup.encode('UTF-8'))
-# if len(soup.find(class_="span8").find_all("tr")) > 6:
-#     release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
-#     print(release_date.encode("UTF-8"))
-#     all_ul = soup.find_all("ul", class_="app-chart-numbers")
-#     stats_raw_str = []
-#     for ul in all_ul:
-#         stats = ul.find_all("li")
-#         for s in stats:
-#             # print(s.get_text().encode("UTF-8"))
-#             stats_raw_str.append(s.get_text())
-#     print(int(soup.find("span", class_="header-thing-good").get_text().replace(',', '')))
-#     print(int(soup.find("span", class_="header-thing-poor").get_text().replace(',', '')))
-#     try:
-#         # print('\t'.join(stats_raw_str).encode('UTF-8'))
-#         out_put = '"'+ '","'.join(_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'"'
-#         # result_file.write('"'+397160+'","'+apps[397160]+'","'+'"'+release_date+'","'+out_put+'\n')
-#         # result_file.flush()
-#     except Exception as e:
-#         # print('\t'.join(stats_raw_str).encode('UTF-8'))
-#         print('ERROR '* 12)
-#         print(e.__traceback__)
-#         print(e)
-# else :
-#     print("Mauvaise App")
+get_steam_apps_stats(2520)
