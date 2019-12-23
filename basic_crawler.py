@@ -172,7 +172,7 @@ def get_steam_apps_stats(app_id=None):
                 out_put = '"'+'","'.join(tag_list)+'"'
                 out_put = '"'+ '","'.join(_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'",'+out_put
                 out_put = '"'+all_reviews_nb+'","'+good_reviews_nb+'","'+bad_reviews_nb+'",'+out_put
-                out_put = '"'+str(k)+'","'+apps.keys()[k]+'","'+'"'+release_date+'","'+price+'",'+out_put
+                out_put = '"'+str(k)+'","'+apps[str(k)]+'","'+'"'+release_date+'","'+price+'",'+out_put
                 result_file.write(out_put+'\n')
                 result_file.flush()
             except Exception as e:
