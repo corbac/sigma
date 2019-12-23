@@ -100,47 +100,61 @@ def _stats_str_parsing(stats_str=''):
 
     return result
 
+def _get_tag_list(max_=10, appid=None):
+    if not appid:
+        return
+    STEAM_BASE_URL = "https://store.steampowered.com/app/"
+    r = requests.get("{}{}".format(STEAM_BASE_URL,appid), headers=_emulate_agent())
+    r = r.text.encode("UTF-8")
+    soup = BeautifulSoup(r, "lxml")
+    tags = soup.find("div", class_="glance_ctn_responsive_right").find_all("a", class_='app_tag')
+    tags = [t.get_text().replace('\n', '').replace('\t', '').replace('\r', '') for t in tags]
+    max_ = min(max_, len(tags))
+    return [tags[i] for i in range(max_)]
+
 ################################
 
-apps = _steamdb_all_app_indie(file_save=True)
+# apps = _steamdb_all_app_indie(file_save=True)
 
-result_file = open("app_stats.csv", "w", encoding="UTF-8")
-for k in apps.keys():
-    print("https://steamdb.info/app/{}/graphs/".format(k))
-    r = requests.get("https://steamdb.info/app/{}/graphs/".format(k), headers=_emulate_agent())
-    r = r.text.encode("UTF-8")
-    # print(r.text.encode("UTF-8"))
-    soup = BeautifulSoup(r, "lxml")
-    if len(soup.find(class_="span8").find_all("tr")) > 6:
-        release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
-        print(release_date.encode("UTF-8"))
-        all_ul = soup.find_all("ul", class_="app-chart-numbers")
-        stats_raw_str = []
-        for ul in all_ul:
-            stats = ul.find_all("li")
-            for s in stats:
-                # print(s.get_text().encode("UTF-8"))
-                stats_raw_str.append(s.get_text())
-        try:
-            # print('\t'.join(stats_raw_str).encode('UTF-8'))
-            out_put = '"'+ '","'.join(_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'"'
-            result_file.write('"'+k+'","'+apps[k]+'","'+'"'+release_date+'","'+out_put+'\n')
-            result_file.flush()
-        except Exception as e:
-            # print('\t'.join(stats_raw_str).encode('UTF-8'))
-            print('ERROR '* 12)
-            print(e.__traceback__)
-            print(e)
-    else :
-        print("Mauvaise App")
-    time.sleep(5)
+# result_file = open("app_stats.csv", "w", encoding="UTF-8")
+# for k in apps.keys():
+#     print("https://steamdb.info/app/{}/graphs/".format(k))
+#     r = requests.get("https://steamdb.info/app/{}/graphs/".format(k), headers=_emulate_agent())
+#     r = r.text.encode("UTF-8")
+#     # print(r.text.encode("UTF-8"))
+#     soup = BeautifulSoup(r, "lxml")
+#     if len(soup.find(class_="span8").find_all("tr")) > 6:
+#         release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
+#         print(release_date.encode("UTF-8"))
+#         all_ul = soup.find_all("ul", class_="app-chart-numbers")
+#         stats_raw_str = []
+#         for ul in all_ul:
+#             stats = ul.find_all("li")
+#             for s in stats:
+#                 # print(s.get_text().encode("UTF-8"))
+#                 stats_raw_str.append(s.get_text())
+#         try:
+#             # print('\t'.join(stats_raw_str).encode('UTF-8'))
+#             out_put = '"'+ '","'.join(_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'"'
+#             result_file.write('"'+k+'","'+apps[k]+'","'+'"'+release_date+'","'+out_put+'\n')
+#             result_file.flush()
+#         except Exception as e:
+#             # print('\t'.join(stats_raw_str).encode('UTF-8'))
+#             print('ERROR '* 12)
+#             print(e.__traceback__)
+#             print(e)
+#     else :
+#         print("Mauvaise App")
+#     time.sleep(5)
 
-result_file.close()
+# result_file.close()
 
 
 # date_str = "May 31, 2017 ()"
 # stats_str = """1 players right now\t6 24-hour player peak\t108 all-time player peak November 22, 2011 \xe2\x80\x93 20:43:21 UTC\t848 followers\t\n0 minutes median playtime in last 2 weeks\n3.1 hours median total playtime\n\t\n0 minutes average playtime in last 2 weeks\n2.5 hours average total playtime\n\t\n500,000 .. 1,000,000 owners (?)\n
 # """
 
+print(_get_tag_list(max_=10, appid=397160))
 
 # print(_stats_str_parsing(stats_str))
+
