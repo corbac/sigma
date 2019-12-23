@@ -154,7 +154,37 @@ def _get_tag_list(max_=10, appid=None):
 # stats_str = """1 players right now\t6 24-hour player peak\t108 all-time player peak November 22, 2011 \xe2\x80\x93 20:43:21 UTC\t848 followers\t\n0 minutes median playtime in last 2 weeks\n3.1 hours median total playtime\n\t\n0 minutes average playtime in last 2 weeks\n2.5 hours average total playtime\n\t\n500,000 .. 1,000,000 owners (?)\n
 # """
 
-print(_get_tag_list(max_=10, appid=397160))
+# print(_get_tag_list(max_=10, appid=397160))
 
 # print(_stats_str_parsing(stats_str))
 
+print("https://steamdb.info/app/{}/graphs/".format(105600))
+r = requests.get("https://steamdb.info/app/{}/graphs/".format(105600), headers=_emulate_agent())
+r = r.text.encode("UTF-8")
+# print(r.text.encode("UTF-8"))
+soup = BeautifulSoup(r, "lxml")
+# print(soup.encode('UTF-8'))
+if len(soup.find(class_="span8").find_all("tr")) > 6:
+    release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
+    print(release_date.encode("UTF-8"))
+    all_ul = soup.find_all("ul", class_="app-chart-numbers")
+    stats_raw_str = []
+    for ul in all_ul:
+        stats = ul.find_all("li")
+        for s in stats:
+            # print(s.get_text().encode("UTF-8"))
+            stats_raw_str.append(s.get_text())
+    print(int(soup.find("span", class_="header-thing-good").get_text().replace(',', '')))
+    print(int(soup.find("span", class_="header-thing-poor").get_text().replace(',', '')))
+    try:
+        # print('\t'.join(stats_raw_str).encode('UTF-8'))
+        out_put = '"'+ '","'.join(_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'"'
+        # result_file.write('"'+397160+'","'+apps[397160]+'","'+'"'+release_date+'","'+out_put+'\n')
+        # result_file.flush()
+    except Exception as e:
+        # print('\t'.join(stats_raw_str).encode('UTF-8'))
+        print('ERROR '* 12)
+        print(e.__traceback__)
+        print(e)
+else :
+    print("Mauvaise App")
