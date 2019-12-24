@@ -26,6 +26,9 @@ def _steamdb_request(URL_BASE_TAG = "https://steamdb.info/tags/?tagid=492", file
     return r.text
     # print(r.content)
 
+def test__steamdb_request():
+    assert type(_steamdb_request()) == str
+
 def _steamdb_all_app_indie(file_save =  False):
     if file_save:
         html_sample = open("sample.html", "r", encoding="UTF-8")
@@ -192,4 +195,4 @@ def get_steam_apps_stats(app_id=None):
 ################################
 
 
-get_steam_apps_stats(2520)
+# get_steam_apps_stats(2520)
