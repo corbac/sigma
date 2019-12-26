@@ -1,4 +1,146 @@
-https://steamdb.info/app/2520/graphs/ ...Failed with: 	 > must be str, not int
-https://steamdb.info/app/2520/graphs/ ...Failed with: 	 > must be str, not int
-https://steamdb.info/app/2520/graphs/ ...Failed with: 	 > 2520
-https://steamdb.info/app/2520/graphs/ ...Failed with: 	 > 'dict_keys' object does not support indexing
+https://steamdb.info/app/296750/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/317160/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/331380/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/381680/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/593590/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/1002430/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/1061280/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/1087030/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/1087050/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/1150130/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/2500/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/2570/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/4900/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/6120/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/10220/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/17500/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/17510/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/17530/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/17570/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/17580/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/18110/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/21400/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/22140/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/24200/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/24240/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/25600/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/26300/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/29140/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/29150/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/31280/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/31500/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/31700/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/35460/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/35800/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/41000/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/41100/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/41300/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/43190/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/46460/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/47540/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/48900/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/50820/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/60600/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/72200/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/72900/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/92000/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/92200/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/92210/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/92220/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/95000/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/95700/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/98400/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/99900/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/102840/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/102850/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/110500/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/200210/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/201070/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/204300/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/206500/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/207040/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/207140/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/207230/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/208090/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/209270/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/209520/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/209830/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/210490/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/210550/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/210870/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/211400/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/212800/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/213650/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/214190/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/214420/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/214560/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/215080/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/215830/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/217100/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/218510/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/218820/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/219150/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/219340/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/219830/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/221020/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/221100/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/222500/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/222520/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/223470/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/223630/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/223710/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/224260/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/224440/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/224540/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/224740/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/224860/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/225600/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/225840/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/226700/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/227220/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/227400/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/227560/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/230210/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/230310/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/230840/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/232090/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/232770/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/232970/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/233980/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/235400/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/235540/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/236110/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/237870/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/238960/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/239840/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/240760/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/241320/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/241620/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/241760/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/242570/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/242610/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/242640/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/242720/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/242760/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/244590/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/244630/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/244930/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/246820/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/248190/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/248410/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/248570/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/248590/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/249330/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/250420/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/250440/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/250600/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/250620/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/250640/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/250660/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/250720/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/250900/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'find_all'
+https://steamdb.info/app/251390/graphs/ ...Failed with: 	 > must be str, not NoneType
+https://steamdb.info/app/251590/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/251650/graphs/ ...Failed with: 	 > 'NoneType' object has no attribute 'get_text'
+https://steamdb.info/app/251950/graphs/ ...Failed with: 	 > list index out of range
+https://steamdb.info/app/252850/graphs/ ...Failed with: 	 > must be str, not NoneType

@@ -1,6 +1,8 @@
 # coding: utf8
 
+import os
 import requests
+import json
 import time
 from bs4 import BeautifulSoup
 import re
@@ -8,13 +10,15 @@ import traceback
 
 # URL_BASE_TAG = "https://steamdb.info/tags/?tagid=492"
 
+def ifNull(var1,var2):
+    return var1 if var1 else var2
 
 def _emulate_agent():
     USER_AGENT = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36"}
     return USER_AGENT
 
 # Requesting The Page
-def _steamdb_request(URL_BASE_TAG = "https://steamdb.info/tags/?tagid=492", file_save = False):
+def _steamdb_request(URL_BASE_TAG="https://steamdb.info/tags/?tagid=492",file_save=False):
     r = requests.get(URL_BASE_TAG, headers=_emulate_agent())
     print(r.status_code)
     print(r.encoding)
@@ -29,29 +33,61 @@ def _steamdb_request(URL_BASE_TAG = "https://steamdb.info/tags/?tagid=492", file
 def test__steamdb_request():
     assert type(_steamdb_request()) == str
 
-def _steamdb_all_app_indie(file_save =  False):
-    if file_save:
-        html_sample = open("sample.html", "r", encoding="UTF-8")
-        sample = ''.join(html_sample.readlines())
-    else:
-        sample = _steamdb_request(file_save=True)
-
-    soup = BeautifulSoup(sample, "lxml")
-    all_td = soup.find_all("td", class_="text-left")
-    apps = {}
-    for td in all_td:
-        # print(td.a)
-        if td.a and td.a.get('href'):
-            # print(td.a.get('href'))
-            apps[td.a.get('href').split('/')[-2]] = td.a.get_text()
-
-    # if file_save:
-    #     file = open("out.txt", "w", encoding="UTF-8")
-    #     file.write(str(apps))
+def _save_progress(app_id, apps):
+    try:
+        exist = not os.stat("tmp/progress.json").st_size == 0
+    except Exception:
+        exist = False
     
+    jfile = open("tmp/progress.json", "r", encoding="UTF-8")
+    apps_saved = dict()
+
+    if exist:
+        print("case2")
+        apps_saved = json.load(jfile)
+        apps_saved[app_id] = apps[app_id]
+    else :
+        print("case1")
+        apps_saved[app_id] = apps[app_id]
+        print(str(apps_saved).encode())
+
+    jfile.close()
+    with open("tmp/progress.json", "w", encoding="UTF-8") as j:
+            json.dump(apps_saved, j, indent=4)
+    
+    
+
+def _load_resume(apps):
+        jfile = open("tmp/progress.json", "r", encoding="UTF-8")
+        apps_done = json.load(jfile)
+
+        return {k : apps[k] for k in (set(apps) - set(apps_done))}
+
+def _steamdb_all_app_indie(file_save =  False):
+    try:
+        saved = not os.stat("apps_list.json").st_size == 0
+    except Exception:
+        saved = False
+    
+    if file_save and saved:
+        jfile = open("apps_list.json", "r+")
+        apps = json.load(jfile)
+    else:
+        sample = _steamdb_request(file_save=file_save)
+        soup = BeautifulSoup(sample, "lxml")
+        all_td = soup.find_all("td", class_="text-left")
+        apps = {}
+        for td in all_td:
+            # print(td.a)
+            if td.a and td.a.get('href'):
+                # print(td.a.get('href'))
+                apps[td.a.get('href').split('/')[-2]] = td.a.get_text()
+        with open("apps_list.json", "w", encoding="UTF-8") as j :
+            json.dump(apps, j, indent=4)
+
     return apps
 
-def _stats_str_parsing(stats_str=''):
+def _get_stats_str_parsing(stats_str=''):
     print('*' * 99)
     print(stats_str.encode('UTF-8'))
     print('*' * 99)
@@ -132,8 +168,19 @@ def _get_price_list(appid=None):
     return str(re.findall("[0-9]+.?[0-9]*", price.get_text())[-1].replace(',', '.'))
 
 
-def get_steam_apps_stats(app_id=None):
-    apps = _steamdb_all_app_indie(file_save=True)
+def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
+    import os
+    TMP_DIR = "tmp/"
+    directory = os.path.dirname(TMP_DIR)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    apps = _steamdb_all_app_indie(file_save=file_save)
+
+    # print(len(_load_resume(apps).keys()))
+    if not reload and not app_id:
+        apps = _load_resume(apps)
+
     keys = [app_id] if app_id else apps.keys()
 
     result_file = open("app_stats.csv", "w+", encoding="UTF-8")
@@ -173,9 +220,9 @@ def get_steam_apps_stats(app_id=None):
 
                 
                 out_put = '"'+'","'.join(tag_list)+'"'
-                out_put = '"'+ '","'.join(_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'",'+out_put
-                out_put = '"'+all_reviews_nb+'","'+good_reviews_nb+'","'+bad_reviews_nb+'",'+out_put
-                out_put = '"'+str(k)+'","'+apps[str(k)]+'","'+'"'+release_date+'","'+price+'",'+out_put
+                out_put = '"'+ '","'.join(_get_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'",'+out_put
+                out_put = '"'+ifNull(all_reviews_nb,'')+'","'+ifNull(good_reviews_nb,'')+'","'+ifNull(bad_reviews_nb,'')+'",'+out_put
+                out_put = '"'+str(ifNull(k,''))+'","'+ifNull(apps[str(k)],'')+'","'+'"'+release_date+'","'+ifNull(price,'')+'",'+out_put
                 result_file.write(out_put+'\n')
                 result_file.flush()
             except Exception as e:
@@ -189,10 +236,13 @@ def get_steam_apps_stats(app_id=None):
                 traceback.print_exc()
         else :
             print("Mauvaise App")
+        
+        _save_progress(k, apps)
         time.sleep(5)
 
     result_file.close()
 ################################
 
-
-# get_steam_apps_stats(2520)
+if __name__ == "__main__":
+    get_steam_apps_stats(file_save=True)
+    # print(str(_steamdb_all_app_indie(file_save=True)).encode("UTF-8"))
