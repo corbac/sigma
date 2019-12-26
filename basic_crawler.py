@@ -39,11 +39,9 @@ def _save_progress(app_id, apps):
 
     apps_saved = dict()
     if exist:
-        print("case2")
         apps_saved = json.load(jfile)
         apps_saved[app_id] = apps[app_id]
     else :
-        print("case1")
         apps_saved[app_id] = apps[app_id]
         print(str(apps_saved).encode())
 
@@ -154,7 +152,7 @@ def _get_tag_list(max_=10, appid=None):
     return [tags[i] for i in range(max_)]
 
 
-def _get_price_list(appid=None):
+def _get_price(appid=None):
     if not appid:
         return
     STEAM_BASE_URL = "https://store.steampowered.com/app/"
@@ -166,6 +164,7 @@ def _get_price_list(appid=None):
         return None
 
     return str(re.findall("[0-9]+.?[0-9]*", price.get_text())[-1].replace(',', '.'))
+
 
 def _get_release_date(soup):
     return soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
@@ -188,7 +187,11 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
 
     result_file = open("app_stats.csv", "w+", encoding="UTF-8")
 
-    for k in keys:
+    size = len(keys)
+
+    
+    for x in range(size):
+        k = keys[size-x]
         print("https://steamdb.info/app/{}/graphs/".format(k))
         r = requests.get("https://steamdb.info/app/{}/graphs/".format(k), headers=_emulate_agent())
         r = r.text.encode("UTF-8")
@@ -216,12 +219,17 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
                 tag_list = _get_tag_list(appid=k)
 
                 # Retrieve: Price
-                price = _get_price_list(appid=k)
+                try:
+                    price = _get_price(appid=k)
+                except Exception:
+                    price = str(0)
 
                 # Retrieve: Reviews numbers
-                good_reviews_nb = soup.find("span", class_="header-thing-good").get_text().replace(',', '')
-                bad_reviews_nb = soup.find("span", class_="header-thing-poor").get_text().replace(',', '')
-                all_reviews_nb = good_reviews_nb + bad_reviews_nb
+                span_good = soup.find("span", class_="header-thing-good")
+                span_bad = soup.find("span", class_="header-thing-poor")
+                good_reviews_nb = span_good.get_text().replace(',', '') if span_good else ''
+                bad_reviews_nb = span_bad.get_text().replace(',', '') if span_bad else ''
+                all_reviews_nb = str(good_reviews_nb + bad_reviews_nb)
 
                 
                 out_put = '"'+'","'.join(tag_list)+'"'
@@ -237,8 +245,6 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
                 fail_log.close()
                 print('ERROR: ')
                 print('*'* 99)
-                print(e.__traceback__)
-                print('-'* 10)
                 print(e)
                 print('-'* 10)
                 traceback.print_exc()
