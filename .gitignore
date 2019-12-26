@@ -2,6 +2,7 @@ htmlcov/
 __pycache__/
 .pytest_cache/
 .vscode/
+tmp/
 *.log
 *.csv
 *.html
