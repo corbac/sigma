@@ -6,4 +6,5 @@ tmp/
 *.log
 *.csv
 *.html
+*.json
 .coverage

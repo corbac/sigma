@@ -32,12 +32,12 @@ def test__steamdb_request():
 def _save_progress(app_id, apps):
     try:
         exist = not os.stat("tmp/progress.json").st_size == 0
+        jfile = open("tmp/progress.json", "r", encoding="UTF-8")
     except Exception:
         exist = False
-    
-    jfile = open("tmp/progress.json", "r", encoding="UTF-8")
-    apps_saved = dict()
+        jfile = open("tmp/progress.json", "w", encoding="UTF-8")
 
+    apps_saved = dict()
     if exist:
         print("case2")
         apps_saved = json.load(jfile)
@@ -54,10 +54,14 @@ def _save_progress(app_id, apps):
     
 
 def _load_resume(apps):
+    apps_done = dict()
+    try:
         jfile = open("tmp/progress.json", "r", encoding="UTF-8")
         apps_done = json.load(jfile)
+    except Exception:
+        apps_done = {}
 
-        return {k : apps[k] for k in (set(apps) - set(apps_done))}
+    return {k : apps[k] for k in (set(apps) - set(apps_done))}
 
 def _steamdb_all_app_indie(file_save =  False):
     try:
@@ -84,14 +88,14 @@ def _steamdb_all_app_indie(file_save =  False):
     return apps
 
 def _get_stats_str_parsing(stats_str=''):
-    print('*' * 99)
-    print(stats_str.encode('UTF-8'))
-    print('*' * 99)
+    # print('*' * 99)
+    # print(stats_str.encode('UTF-8'))
+    # print('*' * 99)
     stats_raw_list = stats_str.split('\t')
-    print(len(stats_raw_list))
+    # print(len(stats_raw_list))
     result = []
     for s in stats_raw_list:
-        print(s.encode('UTF-8'))
+        # print(s.encode('UTF-8'))
         if stats_raw_list.index(s) in [0,1]:
             continue
         
@@ -99,26 +103,26 @@ def _get_stats_str_parsing(stats_str=''):
         # print(type(s.encode('UTF-8')))
         s = str(s.encode('UTF-8')).replace('\\n', '', 1)
         if 'followers' in s:
-            print('\t>Processing...')
+            print('\t>Processing followers...')
             stat_nb = str(s.split(' ')[0])
             stat_desc = s.replace(stat_nb+' ', '')
             result.append(stat_nb)
         elif 'all-time player peak' in s:
-            print('\t>Processing...')
+            print('\t>Processing player peak...')
             stat_nb = str(s.split(' ')[0])
             stat_desc = s.replace(stat_nb+' ', '')
-            print([stat_desc.replace('all-time player peak ', '')])
+            # print([stat_desc.replace('all-time player peak ', '')])
             stat_date = str(stat_desc.replace('all-time player peak ', '').replace("\\xc3\\xa2\\xc2\\x80\\xc2\\x93 ", '').replace('\\xe2\\x80\\x93', '').replace(" UTC'", ""))
 
             result.append(stat_nb)
             result.append(stat_date)
         elif 'minutes median playtime' in s or 'minutes average playtime' in s:
-            print('\t>Processing...')
+            print('\t>Processing playtime...')
             stat_nb_2_wk = str(s.split(' ')[0])
             stat_desc_tmp = s.replace(stat_nb_2_wk+' ', '')
             stat_desc_2_wk = str(stat_desc_tmp.split(' ')[0])
 
-            print(stat_desc_tmp.split('\\n'))
+            # print(stat_desc_tmp.split('\\n'))
             stat_nb_ltd = str(stat_desc_tmp.split('\\n')[1].split(' ')[0])
             stat_desc_tmp = stat_desc_tmp.split('\\n')[1].replace(stat_nb_ltd+' ', '')
             stat_desc_ltd = str(stat_desc_tmp.split(' ')[0])
@@ -128,7 +132,7 @@ def _get_stats_str_parsing(stats_str=''):
             result.append(stat_nb_ltd)
             result.append(stat_desc_ltd)
         elif 'owners' in s:
-            print('\t>Processing...')
+            print('\t>Processing owners...')
             stat_nb = s.split(' owners ')[0].split(' .. ')
             stat_nb_min = str(stat_nb[0].replace(',', ''))
             stat_nb_max = str(stat_nb[1].replace(',', ''))
@@ -163,6 +167,9 @@ def _get_price_list(appid=None):
 
     return str(re.findall("[0-9]+.?[0-9]*", price.get_text())[-1].replace(',', '.'))
 
+def _get_release_date(soup):
+    return soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
+
 
 def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
     import os
@@ -191,8 +198,8 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
         if len(soup.find(class_="span8").find_all("tr")) > 6:
             try:
                 # Retrieve: Release Date
-                release_date = soup.find(class_="span8").find_all("tr")[-1].find_all("td")[-1].get_text().replace(' UTC', '').replace(' ()', '').replace('"', '')
-                print(release_date.encode("UTF-8"))
+                release_date = _get_release_date(soup)
+                print("\t> Release Date: " + str(release_date.encode("UTF-8")) )
 
                 # Retrieve: Stats
                 all_ul = soup.find_all("ul", class_="app-chart-numbers")
@@ -202,6 +209,8 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
                     for s in stats:
                         # print(s.get_text().encode("UTF-8"))
                         stats_raw_str.append(s.get_text())
+                
+                stats_out = '","'.join(_get_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))
                 
                 # Retrieve: Tags list
                 tag_list = _get_tag_list(appid=k)
@@ -216,7 +225,7 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
 
                 
                 out_put = '"'+'","'.join(tag_list)+'"'
-                out_put = '"'+ '","'.join(_get_stats_str_parsing(stats_str='\t'.join(stats_raw_str)))+'",'+out_put
+                out_put = '"'+ stats_out +'",'+out_put
                 out_put = '"'+ifNull(all_reviews_nb,'')+'","'+ifNull(good_reviews_nb,'')+'","'+ifNull(bad_reviews_nb,'')+'",'+out_put
                 out_put = '"'+str(ifNull(k,''))+'","'+ifNull(apps[str(k)],'')+'","'+'"'+release_date+'","'+ifNull(price,'')+'",'+out_put
                 result_file.write(out_put+'\n')
@@ -226,10 +235,14 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
                 fail_log = open("failed_app.log", "a", encoding="UTF-8")
                 fail_log.write("https://steamdb.info/app/{app_id}/graphs/ ...Failed with: \t > {e}\n".format(e=e, app_id=k))
                 fail_log.close()
-                print('ERROR '* 12)
+                print('ERROR: ')
+                print('*'* 99)
                 print(e.__traceback__)
+                print('-'* 10)
                 print(e)
+                print('-'* 10)
                 traceback.print_exc()
+                print('*'* 99)
         else :
             print("Mauvaise App")
         
@@ -241,4 +254,3 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
 
 if __name__ == "__main__":
     get_steam_apps_stats(file_save=True)
-    # print(str(_steamdb_all_app_indie(file_save=True)).encode("UTF-8"))
