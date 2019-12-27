@@ -7,6 +7,7 @@ import time
 from bs4 import BeautifulSoup
 import re
 import traceback
+# import asyncio
 
 # URL_BASE_TAG = "https://steamdb.info/tags/?tagid=492"
 
@@ -183,14 +184,16 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
     if not reload and not app_id:
         apps = _load_resume(apps)
 
-    keys = [app_id] if app_id else apps.keys()
+    # print(str(apps).encode('UTF-8'))
 
+    keys = list([app_id] if app_id else apps.keys()) #As .keys() return a dict_keys in Py3.x
+    
     result_file = open("app_stats.csv", "w+", encoding="UTF-8")
 
     size = len(keys)
-
     
     for x in range(size):
+        x  += 1
         k = keys[size-x]
         print("https://steamdb.info/app/{}/graphs/".format(k))
         r = requests.get("https://steamdb.info/app/{}/graphs/".format(k), headers=_emulate_agent())
@@ -235,7 +238,7 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
                 out_put = '"'+'","'.join(tag_list)+'"'
                 out_put = '"'+ stats_out +'",'+out_put
                 out_put = '"'+ifNull(all_reviews_nb,'')+'","'+ifNull(good_reviews_nb,'')+'","'+ifNull(bad_reviews_nb,'')+'",'+out_put
-                out_put = '"'+str(ifNull(k,''))+'","'+ifNull(apps[str(k)],'')+'","'+'"'+release_date+'","'+ifNull(price,'')+'",'+out_put
+                out_put = '"'+str(ifNull(k,''))+'","'+ifNull(apps[str(k)],'')+'","'+release_date+'","'+ifNull(price,'')+'",'+out_put
                 result_file.write(out_put+'\n')
                 result_file.flush()
             except Exception as e:
