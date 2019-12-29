@@ -188,7 +188,7 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
 
     keys = list([app_id] if app_id else apps.keys()) #As .keys() return a dict_keys in Py3.x
     
-    result_file = open("app_stats.csv", "w+", encoding="UTF-8")
+    result_file = open("app_stats.csv", "a+", encoding="UTF-8")
 
     size = len(keys)
     
@@ -200,7 +200,6 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
         r = r.text.encode("UTF-8")
         soup = BeautifulSoup(r, "lxml")
 
-        
         if len(soup.find(class_="span8").find_all("tr")) > 6:
             try:
                 # Retrieve: Release Date
