@@ -200,6 +200,10 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
         r = r.text.encode("UTF-8")
         soup = BeautifulSoup(r, "lxml")
 
+        if not soup.find(class_="span8"):
+            print('I\'ve encountred a no answer at class="Span8" on appid={}'.format(k))
+            continue
+
         if len(soup.find(class_="span8").find_all("tr")) > 6:
             try:
                 # Retrieve: Release Date
@@ -255,7 +259,7 @@ def get_steam_apps_stats(app_id=None, file_save=False, reload=False):
             print("Mauvaise App")
         
         _save_progress(k, apps)
-        time.sleep(5)
+        time.sleep(1)
 
     result_file.close()
 ################################

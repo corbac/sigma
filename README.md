@@ -12,3 +12,7 @@ Small Indie Game Market Analysis
 - ~~Add a save feature~~
 - Add interactive commandes
 - Bug fix what is remaining
+- - Encoding issue
+- - nb columns on the csv output
+- - better handle of the errors
+- - failover
